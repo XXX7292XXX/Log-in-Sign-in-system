@@ -8,54 +8,57 @@ using namespace std;
 class User
 {
 public:
-	auto UserData(string password, string login, map<string, string>(usermap)) {
-		CheckData(login, password, map<string, string>(usermap));
+	auto UserData(string password, string login, map<string, string>(usermap), bool key) {
+		CheckData(login, password, map<string, string>(usermap), key); cout << key;
 	}
 private:
-	void CheckData(string login, string password, map<string, string>(usermap)) {
-		string s; ifstream file("userdata.txt");bool key = false;
+	 void CheckData(string login, string password, map<string, string>(usermap),bool key) {
+		string s; ifstream file("userdata.txt");
 		while (getline(file, s)){
 			if (s == login + password) key = true;
 		}
-		if (key == true) { cout << "\nВы успешно авторизованы!" << endl; }
-		else { cout << "\nНеверный логин или пароль!" << endl; }
+		if (key == true) { cout << "\n!Access is allowed!" << endl;}
+		else { cout << "\n!Acess is denied!" << endl; }
 	}
 };
 
 int main() {
-	bool start = true;
+	bool start = true;bool key = false;
 	int a;
 	string login, password, newlogin, newpassword;
 	map <string, string> usermap;
 	setlocale(LC_ALL, "Rus");
 	User user1;
 
-	cout << "Доброго времени суток!";
+	cout << "Good Day!!";
 	while (start) {
-		cout << "\nВыберете одну из операций переисленных ниже!\n\n-Авторизироваться в аккаунт - 0.\n-Создать новый аккаунт - 1.\n-Завершить программу - 2" << endl;
+		cout << "\nChoose one of the operations listed below!\n\n-Log in вЂ” 0.\n-Sign in вЂ” 1.\n-Quit вЂ” 2." << endl;
 		cin >> a;
-		if (a == 0) {
-			cout << "Введите логин:" << endl; cin >> login;
-			cout << "Введите пароль:" << endl; cin >> password;
-			user1.UserData(password, login, map<string, string>(usermap));
+		switch(a) {
+			case 0:
+				{cout << "Login: "; cin >> login;
+				cout << "Password: "; cin >> password;
+				user1.UserData(password, login, map<string, string>(usermap), key);
+				break; }
+			case 1:
+				{ofstream fileuser("userdata.txt", ios::out | ios::app);
+				cout << "New Login: "; cin >> newlogin;
+				cout << "New Password: "; cin >> newpassword;
+				string s; ifstream file("userdata.txt"); bool createuser = true;
+				while (getline(file, s)) {
+					if ((s == newlogin + newpassword) or (s == newlogin)) createuser = false;
+				}
+				if (createuser == true) {
+					cout << "Your account has been successfully created! You can log in now." << endl;
+					usermap.insert(make_pair(newlogin, newpassword));
+					fileuser << newlogin + newpassword << endl; fileuser << newlogin << endl;
+				}
+				else { cout << "Account with the same name already exists!" << endl; }
+				break; }
+			default:
+				start = 0;
 		}
-		else if (a == 1) {
-			ofstream fileuser("userdata.txt", ios::out | ios::app);
-			cout << "Задайте логин:" << endl; cin >> newlogin;
-			cout << "Задайте пароль:" << endl; cin >> newpassword;
-			string s; ifstream file("userdata.txt"); bool createuser = true;
-			while (getline(file, s)) {
-				if ((s == newlogin + newpassword) or (s == newlogin)) createuser = false;
-			}
-			if (createuser == true) {
-				cout << "Регистрация завершена, теперь вы можете авторизироваться." << endl;
-				usermap.insert(make_pair(newlogin, newpassword));
-				fileuser << newlogin + newpassword << endl; fileuser << newlogin << endl;
-			}
-			else { cout << "Аккаунт с таким логином уже существует" << endl; }
-		}
-		else if (a == 2) { start = 0; }
 	}
-	cout << "Программа завершена!" << endl;
+	cout << "Programm finished!" << endl;
 	return 0;
 }
