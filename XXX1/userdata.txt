@@ -1,8 +1,1 @@
-aaloxlox
-loxlox
-dmitryqw
-logpass
-loxlox
-logp
-loxlox1
-lox
+login password
